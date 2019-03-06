@@ -1,0 +1,3 @@
+Para dar solución se ha seleccionado el patrón de arquitectura de software Modelo-Vista-Controlador y tambien se ha construido con el patron de diseño Singleton.
+Lo anterior porque nos permite separar una separacion clara de dónde tiene que ir cada tipo de lógica. Esto nos facilita el mantenimiento y la escalabilidad de nuestra aplicación.
+Por el lado del Singleton, nos permite tener una instancia unica a la base de datos, esto nos garantiza un punto de acceso global.
