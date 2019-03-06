@@ -1,0 +1,100 @@
+<?php
+
+	include "App/models/payment.php";
+	include "App/views/home.php";
+	$payment = new Payment();
+	
+	/** LOGICA CREACION AUTENTICACION**/
+	//CREACION SEED
+	$seed = date('c');
+	// Creacion de NONCE
+	if (function_exists('random_bytes')) {
+		$nonce = bin2hex(random_bytes(16));
+	} elseif (function_exists('openssl_random_pseudo_bytes')) {
+		$nonce = bin2hex(openssl_random_pseudo_bytes(16));
+	} else {
+		$nonce = mt_rand();
+	}
+	$nonceBase64 = base64_encode($nonce);
+	// CREACION TRANKEY
+	$tranKey = base64_encode(sha1($nonce . $seed . p2p_secretkey, true));
+
+
+
+
+	/** Cliente REST API**/
+
+	$requestParams=file_get_contents('resources/json_request/pagosencillo.json');
+	$jsonArray = json_decode ($requestParams, true);
+
+	$jsonArray['auth']['login'] = p2p_identifier;
+	$jsonArray['auth']['seed'] = $seed;
+	$jsonArray['auth']['nonce'] = $nonceBase64;
+	$jsonArray['auth']['tranKey'] = $tranKey;
+
+
+
+
+
+
+	//var_dump($jsonArray);
+
+	/*$client = curl_init(p2p_endpoint);
+	curl_setopt($client, CURLOPT_RETURNTRANSFER, true);
+	$output = curl_exec($client);
+	curl_close($client);
+	var_dump(json_decode($output, true));*/
+	/** LISTAR TODOS LOS INTENTOS**/
+	/*
+	$listPayments = array();
+	if($result = $payment->read()){
+		while($obj = $result->fetch_object()){
+			$pay = new Payment();
+			$pay->status = $obj->status;
+			$pay->reason = $obj->reason;
+			$pay->message = $obj->message;
+			$pay->date = $obj->date;
+			$pay->requestId = $obj->requestId;
+			$pay->processUrl = $obj->processUrl;
+			array_push($listPayments, $pay);
+		}
+		foreach ($listPayments as $pay) {
+			echo 'Estado: ' .$pay->status ." <br>";
+		}
+	}
+	*/
+
+	/** REGISTRAR PAGO **/
+	/*
+	$payment->status = "FAILED";
+	$payment->reason = "PC";
+	$payment->message = "La petición se ha procesado correctamente";
+	$payment->date = date('Y-m-d H:i:s');
+	$payment->requestId = "784";
+	$payment->processUrl = "https://dev.placetopay.com/redirection/session/784/8135922ccf67492be57121e29e60f12f";
+
+	if($payment->create()){
+		echo '{';
+		echo '"message": "Payment registrado."';
+		echo '}';
+	}
+	else{
+		echo '{';
+		echo '"message": "Payment no registrado."';
+		echo '}';
+	}
+	*/
+
+
+
+
+ 	/*$db = Database::getInstance();
+    $mysqli = $db->getConnection(); 
+    $sql_query = "select * from p2p_payment_response";
+    $result = $mysqli->query($sql_query);
+
+    print_r($result);
+
+    $db->closeConnection(); */
+
+?>

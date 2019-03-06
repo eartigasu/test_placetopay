@@ -1,0 +1,13 @@
+Para solucionar la problematica presentada, se decidio optar por un patrón de arquitectura MVC, con el cual se abarca de manera robusta, escalable y mantenible dicha situación.
+Bajo este contexto, como pidieron hacerlo en PHP (mi fuerte es java), decidí crear un mini framework MVC bajo el cual desarrolle la solucion.
+A continuación detallo como se presenta la solucion en el aplicativo.
+
+
+0.- Directorios:
+	-->/APP:  directorio donde se encuentra la aplicación en si, las vistas, controladores, modelos, configuracion, 			  recursos, librerias (guzzle 6.3).
+	-->/CORE: Configuración necesaria para el funcionamiento de este mini framework, carga de controladores, de vistas 			  y configuracion de la conexion a la base de datos.
+	-->/PUBLIC: directorio en el cual esta nuestro index, el encargado de realizar autoload de las clases utilizadas.
+1.- Configuración inicial. --> archivo: /App/config.ini (parametros de base de datos, url servicio, uris, archivos)
+2.- Conexión con base de datos MYSQL. --> clase: /core/database.php
+3.- Conexión a los servicios PlaceToPay --> clase: /App/models/restclient.php
+4.- Lógica generación REQUEST para servicio Pago Básico --> clase: /App/controllers/placetopay.php
